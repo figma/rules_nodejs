@@ -443,9 +443,9 @@ async function findPackagesAndPush(pkgs, p, dependencies) {
         return;
     }
     const listing = await fs_1.promises.readdir(p);
-    await Promise.all(listing.map(async (f) => {
+    for (const f of listing) {
         if (f.startsWith('.'))
-            return [];
+            continue;
         const pf = path.posix.join(p, f);
         if (await isDirectory(pf)) {
             if (f.startsWith('@')) {
@@ -456,7 +456,7 @@ async function findPackagesAndPush(pkgs, p, dependencies) {
                 await findPackagesAndPush(pkgs, path.posix.join(pf, 'node_modules'), dependencies);
             }
         }
-    }));
+    }
 }
 async function findScopes() {
     const p = nodeModulesFolder();
